@@ -32,43 +32,50 @@ void    *start_living(void *p)
         {
             if (take_right_fork(myself))
             {
-                printf("Philosopher %d is eating\n", myself->id);
-                release_forks(p);
-                myself->meal_counter += 1;
+                if ((myself->left_fork->philo_id == myself->id) && (myself->right_fork->philo_id == myself->id))
+                {
+                    myself->meal_counter += 1;
+                    printf("Philosopher %d is eating, nb de repas = %d / 3 \n", myself->id, myself->meal_counter);
+                    release_forks(myself);
+                }
             }
+            else
+                release_left_fork(myself);
         }
+        else
+            sleep(1);
     }
+    return (0);
 }
 
 int main (int ac, char **av)
 {
     int i = 0;
-    struct args  input;
     struct Philosopher  *philos;
     t_fork        *forks;
-    pthread_mutex_t     *mutex_array;
+    struct args  input;
     
-    if (init_input(ac, av, &input))
+    if (!init_input(ac, av, &input))
         return (0);
     philos = malloc(sizeof(struct Philosopher) * input.nb_of_philos);
     forks = malloc(sizeof(struct t_fork *) * input.nb_of_philos);
-    mutex_array = (malloc(sizeof(pthread_mutex_t) * input.nb_of_philos));
     //init Fork struct
     while(i < input.nb_of_philos)
     {
-        forks[i].index = (i % (input.nb_of_philos - 1) + 1);
-        forks[i].mutex = mutex_array[i];
+        forks[i].index = i;
+        pthread_mutex_init(&forks[i].mutex, NULL);
+        forks[i].philo_id = -1;
         i++;
     }
-
-    // init Philos struct
+    // init Philosopher struct
     i = 0;
     while(i < input.nb_of_philos)
     {
         philos[i].index = i;
         philos[i].id = i + 1;
         philos[i].left_fork = &forks[i];
-        philos[i].right_fork = &forks[i % input.nb_of_philos];
+        philos[i].right_fork = &forks[(i + 1) % input.nb_of_philos];
+        philos[i].meal_counter = 0;
         pthread_create(&philos[i].thread, NULL, start_living, &philos[i]);
         i++;
     }
