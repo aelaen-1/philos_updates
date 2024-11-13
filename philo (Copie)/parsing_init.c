@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_init.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboukezi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aelaen <aelaen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 13:57:17 by aboukezi          #+#    #+#             */
-/*   Updated: 2024/11/08 13:57:29 by aboukezi         ###   ########.fr       */
+/*   Updated: 2024/11/13 18:41:38 by aelaen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ int     init_input(int ac, char **av, struct args *args_out)
         else
         {
             error_msg();
-            return (1);
+            return (0);
         }
         i++;
     }
-    return (0);
+    return (1);
 }

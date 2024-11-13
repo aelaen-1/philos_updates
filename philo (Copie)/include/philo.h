@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboukezi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aelaen <aelaen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:57:15 by aboukezi          #+#    #+#             */
-/*   Updated: 2024/11/08 12:57:16 by aboukezi         ###   ########.fr       */
+/*   Updated: 2024/11/13 20:03:31 by aelaen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,6 @@ struct  args{
     int     time_to_sleep;
     int     nb_of_meals;
 };
-
-// struct  Philosopher{
-//     pthread_t thread;
-//     int     index;
-//     int     id;
-//     struct t_fork   *left_fork;
-//     struct t_fork   *right_fork;
-// };
 
 struct  Philosopher{
     pthread_t thread;
@@ -63,6 +55,8 @@ long long   ft_strtoll(char *s);
 
 int take_left_fork(struct Philosopher *p);
 int take_right_fork(struct Philosopher *p);
+void release_left_fork(struct Philosopher *p);
+void release_right_fork(struct Philosopher *p);
 void release_forks(struct Philosopher *p);
 
 #endif

@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aboukezi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aelaen <aelaen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 12:56:56 by aboukezi          #+#    #+#             */
-/*   Updated: 2024/11/08 12:56:58 by aboukezi         ###   ########.fr       */
+/*   Updated: 2024/11/14 00:35:44 by aelaen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/philo.h"
-
-// struct  Philosopher{
-//     pthread_t thread;
-//     int     index;
-//     int     id;
-//     int     meal_counter;
-//     pthread_mutex_t *mutex;
-//     t_fork   *left_fork;
-//     t_fork   *right_fork;
-// };
 
 void    *start_living(void *p)
 {
