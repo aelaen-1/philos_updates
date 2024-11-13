@@ -23,28 +23,46 @@
 # include <stdbool.h>
 # include "colors.h"
 
-typedef struct  args{ // juste struct ??
+struct  args{
     int     nb_of_philos;
     int     time_to_die;
     int     time_to_eat;
     int     time_to_sleep;
     int     nb_of_meals;
-}   t_args;
+};
 
-typedef struct  fork{
-    pthread_mutex_t *mutex_object;
-    int     id;
-}       t_fork;
+// struct  Philosopher{
+//     pthread_t thread;
+//     int     index;
+//     int     id;
+//     struct t_fork   *left_fork;
+//     struct t_fork   *right_fork;
+// };
 
-typedef struct  philosopher{
+struct  Philosopher{
+    pthread_t thread;
     int     index;
-    int     id; // index + 1
-    bool    left_fork;
-    bool    right_fork;
-}       t_philo;
+    int     id;
+    int     meal_counter;
+    pthread_mutex_t *mutex;
+    struct Fork   *left_fork;
+    struct Fork   *right_fork;
+};
 
-int     init_input(int ac, char **av, t_args *args_out);
+typedef struct  Fork{
+    int     index;
+    pthread_mutex_t mutex;
+    int    philo_id;
+}   t_fork;
+
+int     init_input(int ac, char **av, struct args *args_out);
 long long   ft_strtoll(char *s);
 
+
+// forks.c
+
+int take_left_fork(struct Philosopher *p);
+int take_right_fork(struct Philosopher *p);
+void release_forks(struct Philosopher *p);
 
 #endif

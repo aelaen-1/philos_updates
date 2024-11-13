@@ -12,78 +12,64 @@
 
 #include "include/philo.h"
 
-//number_of_philosophers time_to_die time_to_eat time_to_sleep [nb of times each philo must eat]
+// struct  Philosopher{
+//     pthread_t thread;
+//     int     index;
+//     int     id;
+//     int     meal_counter;
+//     pthread_mutex_t *mutex;
+//     t_fork   *left_fork;
+//     t_fork   *right_fork;
+// };
 
-// static void *action(void *i)
-// {
-        // int     n; // doesnt work with FLAGS
-        // n = *((int *)i); //core dumped
-//     printf (BBLU "Je suis le philosophe " UMAG "%d\n" reset, n);
-// }
-
-// int main (int ac, char **av)
-// {
-//     int     err;
-//     pthread_t   philo[30];
-//     int     i;
-    
-//     i = 0;
-//     err = init_input(ac, av);
-//     if (err)
-//         return (0);
-//     while (i < 30)
-//     {
-//         pthread_create(&philo[i], NULL, action, (void *)i);
-//         pthread_join(philo[i], NULL);
-//         i++;
-//     }
-    
-//     return (0);
-// }
-struct philo{
-    pthread_t thread;
-    int id;
-    int *ptrx;
-    pthread_mutex_t     *mutex;
-};
-
-void    *action(void *p)
+void    *start_living(void *p)
 {
-    struct philo *myself = (struct philo *)p;
-    
-    pthread_mutex_lock(myself->mutex);
-    *(myself->ptrx) = *(myself->ptrx )+ 1;
-    printf("%d : %d\n", myself->id, *(myself->ptrx));
-    // printf("Philosophe %d :  Init counter = %d\n", myself->id, counter);
-    // sleep(1);
-    // int newcounter = counter+1;
-    // printf("Philosophe %d :  Init counter = %d, New counter = %d\n", myself->id, counter, newcounter);
-    pthread_mutex_unlock(myself->mutex);
-    pthread_exit(0);
+    struct Philosopher *myself = (struct Philosopher *)p;
+    //eat
+    while(1)
+    {
+        if (take_left_fork(myself))
+        {
+            if (take_right_fork(myself))
+            {
+                printf("Philosopher %d is eating\n", myself->id);
+                release_forks(p);
+                myself->meal_counter += 1;
+            }
+        }
+    } // va crash, arreter la boucle 
 }
-
 
 int main (int ac, char **av)
 {
-    int     err;
-    struct philo *philos; // philo[ft_strtoll(av[1])]
-    int     i;
-    t_args  input;
-    int x = 0;
-    pthread_mutex_t     mtx;
-    pthread_mutex_init(&mtx, NULL);
-    i = 0;
-    err = init_input(ac, av, &input);
-    if (err)
+    int i = 0;
+    struct Philosopher  *philos;
+    t_fork        *forks;
+    struct args  input;
+    pthread_mutex_t     *mutex_array;
+    
+    if (init_input(ac, av, &input))
         return (0);
-    philos = malloc(sizeof(struct philo) * input.nb_of_philos);
+    philos = malloc(sizeof(struct Philosopher) * input.nb_of_philos);
+    forks = malloc(sizeof(struct t_fork *) * input.nb_of_philos);
+    mutex_array = (malloc(sizeof(pthread_mutex_t) * input.nb_of_philos));
+    //init Fork struct
     while(i < input.nb_of_philos)
     {
-        philos[i].id = i + 1;
-        philos[i].ptrx = &x;
-        philos[i].mutex = &mtx;
-        pthread_create(&philos[i].thread, NULL, action,  &philos[i]);
+        forks[i].index = (i % (input.nb_of_philos - 1) + 1);
+        forks[i].mutex = mutex_array[i];
         i++;
+    }
+
+    // init Philos struct
+    i = 0;
+    while(i < input.nb_of_philos)
+    {
+        philos[i].index = i;
+        philos[i].id = i + 1;
+        philos[i].left_fork = &forks[i];
+        philos[i].right_fork = &forks[i % input.nb_of_philos];
+        philos[i].thread = pthread_create(&philos[i].thread, NULL, start_living, &philos[i]);
     }
     i = 0;
     while(i < input.nb_of_philos)
@@ -91,34 +77,5 @@ int main (int ac, char **av)
         pthread_join(philos[i].thread, NULL);
         i++;
     }
-    return (0);
+    return(0);
 }
-
-
-// int main (int ac, char **av)
-// {
-//     int     err;
-//     pthread_t   philo[3]; // philo[ft_strtoll(av[1])]
-//     int     i;
-//     int     *ids;
-//     t_args  input;
-    
-//     i = 0;
-//     ids = malloc(sizeof(int) * 3);
-//     err = init_input(ac, av, &input);
-//     if (err)
-//         return (0);
-
-//     while(i < 3)
-//     {
-//         pthread_create(&philo[i], NULL, action,  &i);
-//         i++;
-//     }
-//     i = 0;
-//     while(i < 3)
-//     {
-//         pthread_join(philo[i], NULL);
-//         i++;
-//     }
-//     return (0);
-// }

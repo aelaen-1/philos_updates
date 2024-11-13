@@ -19,7 +19,7 @@ static void     error_msg(void)
         //     time_to_sleep nb_of_meal");
 }
 
-static void    fill_input(char *s, char **av, t_args *args_out)
+static void    fill_input(char *s, char **av, struct args *args_out)
 {
     if (s == av[1])
         args_out->nb_of_philos = ft_strtoll(av[1]);
@@ -33,7 +33,7 @@ static void    fill_input(char *s, char **av, t_args *args_out)
         args_out->nb_of_meals = ft_strtoll(av[5]);
 }
 
-int     init_input(int ac, char **av, t_args *args_out)
+int     init_input(int ac, char **av, struct args *args_out)
 {
     int     i;
 
@@ -43,11 +43,13 @@ int     init_input(int ac, char **av, t_args *args_out)
     args_out->time_to_sleep = 0;
     args_out->nb_of_meals = 0;
     i = 1;
-    if (ac != 6)
-    {
-        write(1, "5 arguments needed\n", 19);
-        return (1);
-    }
+    
+    (void)ac;
+    // if (ac != 5 && ac != 6)
+    // {
+    //     write(1, "5 arguments needed\n", 19);
+    //     return (1);
+    // }
     while(av[i])
     {
         if (ft_strtoll(av[i]) > 0)

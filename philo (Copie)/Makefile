@@ -13,10 +13,11 @@
 NAME = philo
 CC = cc
 FLAGS = -Wall -Werror -Wextra 
-
+# valgrind --tool=helgrind ./multi_thread_loop_mutex
 
 SRC = main.c \
       parsing_init.c \
+	  forks.c \
       utils.c \
 	  actions.c
 
