@@ -26,7 +26,7 @@ void    *start_living(void *p)
 {
     struct Philosopher *myself = (struct Philosopher *)p;
     //eat
-    while(1)
+    while(myself->meal_counter < 3)
     {
         if (take_left_fork(myself))
         {
@@ -37,15 +37,15 @@ void    *start_living(void *p)
                 myself->meal_counter += 1;
             }
         }
-    } // va crash, arreter la boucle 
+    }
 }
 
 int main (int ac, char **av)
 {
     int i = 0;
+    struct args  input;
     struct Philosopher  *philos;
     t_fork        *forks;
-    struct args  input;
     pthread_mutex_t     *mutex_array;
     
     if (init_input(ac, av, &input))
@@ -69,7 +69,8 @@ int main (int ac, char **av)
         philos[i].id = i + 1;
         philos[i].left_fork = &forks[i];
         philos[i].right_fork = &forks[i % input.nb_of_philos];
-        philos[i].thread = pthread_create(&philos[i].thread, NULL, start_living, &philos[i]);
+        pthread_create(&philos[i].thread, NULL, start_living, &philos[i]);
+        i++;
     }
     i = 0;
     while(i < input.nb_of_philos)
